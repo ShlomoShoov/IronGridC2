@@ -11,13 +11,17 @@ namespace Consumer.Services
     public class ReportsProcessorService
     {
         private KafkaConsumerSetting _settings;
+        private string _serviceName = "Reports Processor Service";
+        private IIRonGridLogger _logger;
 
-        public ReportsProcessorService(KafkaConsumerSetting setting)
+        public ReportsProcessorService(KafkaConsumerSetting setting, IIRonGridLogger logger)
         {
             _settings = setting;
+            _logger = logger;
         }
         public AssetLiveStatus ProcessReport(ConsumeResult<Null, string> ReportEvent)
         {
+            _logger.Debug(_serviceName, $"New Message from {ReportEvent.Topic} | offset: {ReportEvent.Offset} | Data: {ReportEvent.Message.Value}");
             Report report = JsonSerializer.Deserialize<Report>(ReportEvent.Message.Value)!;
             
             AssetLiveStatus liveStatus = new AssetLiveStatus
@@ -37,6 +41,7 @@ namespace Consumer.Services
             {
                 _CalculateUAV(report, liveStatus);
             }
+            _logger.Debug(_serviceName, $"Is Verified = {liveStatus.IsVerified} | Status = {liveStatus.ProcessedStatus}");
 
             return liveStatus;
 

@@ -25,6 +25,9 @@ serviceDescriptors.AddDbContext<IronGridDbContext>(options=> options.UseMySql(co
 serviceDescriptors.AddSingleton<IIRonGridLogger, ConsoleLogger>();
 serviceDescriptors.AddScoped<AssetLiveStatusRepository>();
 serviceDescriptors.AddSingleton<ConsumerOrchestrators>();
+serviceDescriptors.AddScoped<ReportsProcessorService>();
+serviceDescriptors.AddSingleton<KafkaConsumerService>();
+serviceDescriptors.AddSingleton(kafkaSettings);
 
 ServiceProvider serviceProvider = serviceDescriptors.BuildServiceProvider();
 
@@ -32,3 +35,4 @@ ServiceProvider serviceProvider = serviceDescriptors.BuildServiceProvider();
 ConsumerOrchestrators orchestrators = serviceProvider.GetRequiredService<ConsumerOrchestrators>();
 
 await orchestrators.InitAsync();
+await orchestrators.Run();

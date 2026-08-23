@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Confluent.Kafka;
 using Consumer.DAL;
 using Consumer.Repositories;
 using Consumer.Services;
@@ -28,6 +29,25 @@ namespace Consumer.Orchestrators
                 using var scope = _serviceProvider.CreateScope();
                 AssetLiveStatusRepository repository = scope.ServiceProvider.GetRequiredService<AssetLiveStatusRepository>();
                 await repository.InitAsync(rawSql);
+            }
+        }
+
+        public async Task Run()
+        {
+            using var kafkaScope = _serviceProvider.CreateScope();
+            KafkaConsumerService kafka = kafkaScope.ServiceProvider.GetRequiredService<KafkaConsumerService>();
+            
+            while (true)
+            {
+                ConsumeResult<Null, string> result = kafka.Consume();
+                if (result != null && result.Message.Value != null)
+                {
+                    using var processingScope = _serviceProvider.CreateScope();
+                    ReportsProcessorService processorService = processingScope.ServiceProvider.GetRequiredService<ReportsProcessorService>();
+                    AssetLiveStatusRepository repository = processingScope.ServiceProvider.GetRequiredService<AssetLiveStatusRepository>();
+                    await repository.AddAssetLiveStatus(processorService.ProcessReport(result));
+                    processingScope.Dispose();
+                }
             }
         }
 
