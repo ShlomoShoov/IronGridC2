@@ -48,6 +48,7 @@ namespace Consumer.Repositories
                 asset.AssetLiveStatus.IsVerified = assetLiveStatus.IsVerified;
                 asset.AssetLiveStatus.ProcessedStatus = assetLiveStatus.ProcessedStatus;
                 asset.AssetLiveStatus.RawValue = assetLiveStatus.RawValue;
+                asset.AssetLiveStatus.LastUpdate = assetLiveStatus.LastUpdate;
                 await _context.SaveChangesAsync();
                 _logger.Debug(_serviceName, $"there is existing status for {assetLiveStatus.AssetId} replacing data ");
 

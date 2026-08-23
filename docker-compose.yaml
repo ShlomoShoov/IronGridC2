@@ -37,6 +37,7 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
+        
   consumer:
     build:
       context: ./Consumer
@@ -54,6 +55,8 @@ services:
         condition: service_healthy
       mysql:
         condition: service_healthy
+      producer:
+        condition: service_started
 
 
   mysql:

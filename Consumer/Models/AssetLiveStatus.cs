@@ -14,7 +14,7 @@ namespace Consumer.Models
         public string RawValue { get; set; } = string.Empty;
         public ProcessedStatus ProcessedStatus { get; set; }
         public bool IsVerified { get; set; }
-        public DateTime Timestamp { get; set; }
+        public DateTime LastUpdate { get; set; }
 
     }
 }
