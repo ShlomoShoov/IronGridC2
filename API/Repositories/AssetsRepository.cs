@@ -48,19 +48,24 @@ namespace API.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> UpdateAssetAsync(int id, UpdateAssetDTO updatedAsset)
+        public async Task<AssetDTO?> UpdateAssetAsync(int id, UpdateAssetDTO updatedAsset)
         {
             Asset? asset = await _context.Assets.FirstOrDefaultAsync(a=> a.Id == id);
             if (asset == null)
             {
-                return false;
+                return null;
             }
-
+            bool NewUnitExists = await _context.Units.AnyAsync(u=> u.Id == updatedAsset.UnitId);
+            if (!NewUnitExists)
+            {
+                return null;
+            } 
+            
             asset.UnitId = updatedAsset.UnitId;
             asset.AssetType = updatedAsset.AssetType;
             asset.AssetSerial = updatedAsset.AssetSerial;
             await _context.SaveChangesAsync();
-            return true;
+            return DtoizeAsset(asset);
         }
 
         public async Task<bool> DeleteAssetAsync(int id)

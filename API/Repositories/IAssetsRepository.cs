@@ -10,7 +10,7 @@ namespace API.Repositories
     {
         public  Task<AssetDTO?> GetAssetByIdAsync(int id);
         public  Task CreateUnitAsync(CreateUnitDto unitDto);
-        public Task<bool> UpdateAssetAsync(int id, UpdateAssetDTO updatedAsset);
+        public Task<AssetDTO?> UpdateAssetAsync(int id, UpdateAssetDTO updatedAsset);
         public  Task<bool> DeleteAssetAsync(int id);
 
 

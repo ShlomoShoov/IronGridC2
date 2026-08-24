@@ -38,21 +38,22 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAssetAsync(int id, UpdateAssetDTO updatedAsset)
         {
-            if (await _repository.UpdateAssetAsync(id, updatedAsset))
+            AssetDTO? asset = await _repository.UpdateAssetAsync(id, updatedAsset);
+            if (asset == null)
             {
-                return NoContent();
+                return NotFound();
             }
-            return NotFound();
+            return Ok(asset);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAssetAsync(int id)
         {
-            if (await _repository.DeleteAssetAsync(id))
+            if (!await _repository.DeleteAssetAsync(id))
             {
                 return NoContent();
             }
-            return NotFound();
+            return Ok();
         }
 
 

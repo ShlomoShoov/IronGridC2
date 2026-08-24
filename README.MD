@@ -54,3 +54,17 @@ Note that every server needs that all of the containers before to started
     - I Created a Generic logger so I it will be easy to follow the system flow
 
 
+**Consumer Flow**
+
+    - We init the system, Loading the seed sql file and send it to the sql as a raw command, so all of the tables and the base data will create
+    - In endless loop we listen to new messages from kafka to the topics we need
+    - for each report that comes we send it to the processor 
+    - the processor convert it into the AssetLiveReport and than calculate the logic business and return a object to send to the data base
+    - than we send that live status to the repository, which checks if we already have a status for the asset, if yes, update it, otherwise, created a new one.
+
+
+### Notes
+
+    - In the PUT `/api/assets/{id}` I assume That we Should allow changing the Unit Id field, so I added check to make sure the new unit exists, if not , return 404 (as required), but I should return 422 or 400, but I do as required.
+    - In the POST `/api/assets/units` the Id assign automatically by the Db, so we should return the new Id, but I did as required.
+    
