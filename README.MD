@@ -31,6 +31,26 @@
 
 Go to http://localhost:8000/swagger for visual api testing (If you change the port on the .env file, make sure to replace it here!)
 
+---
 
 ### Project Flow & Architecture  
+
+When You Run `docker compose up` 6 servers are started by that order:
+
+Kafka -> Producer -> Mysql -> Consumer -> Redis -> API
+
+Note that every server needs that all of the containers before to started
+
+**Producer Flow**
+
+    - Loading the raw data from Data/field_report.json and converting to `Report Objects` 
+    - For each Report, Produce it to specific kafka topic (by its AssetType)
+    - When there is no more report that's loaded from the file, we flush and dispose.
+
+**Producer Architecture**
+    
+    - I use interface of ILoader which return Enumerator, so we can replace it easily with API, or multiple files
+    - I send the topic names from the .env file, to make sure they will be all the same in all the systems
+    - I Created a Generic logger so I it will be easy to follow the system flow
+
 
