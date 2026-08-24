@@ -35,6 +35,7 @@ CREATE TABLE IF NOT EXISTS Assets (
     AssetType VARCHAR(255) DEFAULT "GenericAsset",
     FOREIGN KEY (UnitId)
     REFERENCES Units(id)
+    ON DELETE CASCADE
 );
 
 -- ============================================================
@@ -46,7 +47,7 @@ CREATE TABLE IF NOT EXISTS Assets (
 -- and the primary key according to the project specification.
 
 CREATE TABLE IF NOT EXISTS AssetLiveStatuses (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    Id INT AUTO_INCREMENT PRIMARY KEY,
     AssetId INT,
     AssetType VARCHAR(255) NOT NULL,
     RawValue VARCHAR(255) NOT NULL ,
@@ -55,6 +56,7 @@ CREATE TABLE IF NOT EXISTS AssetLiveStatuses (
     LastUpdate DATETIME NOT NULL,
     FOREIGN KEY(AssetId)
     REFERENCES Assets(Id)
+    ON DELETE CASCADE
 
 );
 
