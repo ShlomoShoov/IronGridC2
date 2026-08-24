@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Models;
+using API.Models.DTOs.AssetsStatusDTOs;
 using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +20,23 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult> Test()
+        public async Task<ActionResult<IEnumerable<AssetStatusDTO>>> GetAssetsWithStatusAsync(string? status)
         {
-            return Ok("Hello world!");
+            if(status == null)
+            {
+                return Ok(await _repository.GetAssetsWithStatusAsync());
+            }
+            else if(!Enum.TryParse<ProcessedStatus>(status, out ProcessedStatus processedStatus))
+            {
+                return Ok(new List<AssetStatusDTO> ());
+            }
+            else
+            {
+                return Ok(await _repository.GetAssetsWithStatusFilterByStatus(processedStatus));
+            }
         }
+
+        
+
     }
 }
