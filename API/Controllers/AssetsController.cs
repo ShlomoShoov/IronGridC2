@@ -51,9 +51,9 @@ namespace API.Controllers
         {
             if (!await _repository.DeleteAssetAsync(id))
             {
-                return NoContent();
+                return NotFound();
             }
-            return Ok();
+            return NoContent();
         }
 
 
