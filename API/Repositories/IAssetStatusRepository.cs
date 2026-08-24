@@ -11,6 +11,8 @@ namespace API.Repositories
     {
         public  Task<IEnumerable<AssetStatusDTO>> GetAssetsWithStatusAsync();
         public  Task<IEnumerable<AssetStatusDTO>> GetAssetsWithStatusFilterByStatus(ProcessedStatus status);
+        public  Task<AssetStatusDTO?> GetAssetStatusByIdAsync(int id);
+
 
 
 

@@ -6,6 +6,8 @@ using API.Models;
 using API.Models.DTOs.AssetsStatusDTOs;
 using Consumer.DAL;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using StackExchange.Redis;
 
 namespace API.Repositories
 {
@@ -13,7 +15,7 @@ namespace API.Repositories
     {
         private IronGridDbContext _context;
 
-        public AssetStatusRepository(IronGridDbContext context)
+        public AssetStatusRepository(IronGridDbContext context, IConnectionMultiplexer muxer)
         {
             _context = context;
         }
@@ -46,6 +48,11 @@ namespace API.Repositories
         public async Task<IEnumerable<AssetStatusDTO>> GetAssetsWithStatusFilterByStatus(ProcessedStatus status)
         {
             return await _DtoizeAssetsWithStatus(_context.Assets.Where(a=> a.AssetLiveStatus!= null && a.AssetLiveStatus.ProcessedStatus == status)).ToListAsync();
+        }
+
+        public async Task<AssetStatusDTO?> GetAssetStatusByIdAsync(int id)
+        {
+            return await _DtoizeAssetsWithStatus(_context.Assets.Where(a=> a.Id == id)).FirstOrDefaultAsync();
         }
     }
 }

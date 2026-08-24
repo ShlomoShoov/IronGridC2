@@ -81,14 +81,18 @@ services:
     container_name: api
     environment:
       - ConnectionStrings__mysql=Server=mysql;User=root;Port=3306;Password=${MYSQL_ROOT_PASSWORD};Database=${MYSQL_DATABASE}
+      - ConnectionStrings__redis=${REDIS_CONNECTION_STRING}
     
     ports:
       - ${API_PORT}:8080
-
     depends_on:
       mysql:
         condition: service_healthy
       consumer:
         condition: service_started
 
-
+  redis:
+      image: redis:latest
+      container_name: redis
+      ports:
+          - '6379:6379'
