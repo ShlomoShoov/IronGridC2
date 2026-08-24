@@ -74,3 +74,21 @@ services:
     ports:
      - "3306:3306"
 
+  api:
+    build:
+      context: ./API
+      dockerfile: Dockerfile
+    container_name: api
+    environment:
+      - ConnectionStrings__mysql=Server=mysql;User=root;Port=3306;Password=${MYSQL_ROOT_PASSWORD};Database=${MYSQL_DATABASE}
+    
+    ports:
+      - ${API_PORT}:8080
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+      consumer:
+        condition: service_started
+
+

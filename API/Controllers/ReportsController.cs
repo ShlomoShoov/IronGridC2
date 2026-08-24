@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using API.Exceptions;
+using API.Models.DTOs.ReportsDTOs;
 using API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,10 +19,29 @@ namespace API.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Test()
+        [HttpGet("critical-assets")]
+        public async Task<ActionResult<IEnumerable<ReportCriticalAssetsDTO>>> GetReportCriticalAssetsAsync()
         {
-            return Ok("Hello world!");
+            return Ok(await _repository.GetReportCriticalAssetsAsync());
         }
+        [HttpGet("unit/{unitId}/assets")]
+        public async Task<ActionResult<IEnumerable<ReportUnitAssetsStatusDTO>>> GetReportUnitAssetsStatusesAsync(int unitId)
+        {
+            try
+            {
+                return Ok(await _repository.GetReportUnitAssetsStatusesAsync(unitId));
+            }
+            catch (UnitNotExistsException)
+            {
+                return  NotFound();
+            }
+        }
+        [HttpGet("summary-by-unit")]
+        public async Task<ActionResult<IEnumerable<SummaryByUnitDTO>>> GetSummaryByUnitAsync()
+        {
+            return Ok(await _repository.GetSummaryByUnitAsync());
+        }
+
+
     }
 }

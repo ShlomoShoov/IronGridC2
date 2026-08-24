@@ -1,20 +1,22 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace API.Models.DTOs.AssetsDTOs
+namespace API.Models.DTOs.ReportsDTOs
 {
-    public class UpdateAssetDTO
+    public class ReportUnitAssetsStatusDTO
     {
-        public int UnitId { get; set; }
+        public int AssetId { get; set; }
+
         public string AssetSerial { get; set; } = string.Empty;
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public AssetType AssetType { get; set; } = AssetType.GenericAsset;
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public ProcessedStatus? ProcessedStatus { get; set; }
+        public bool? IsVerified { get; set; }
+        public DateTime? LastUpdate { get; set; }
     }
 }
