@@ -29,6 +29,8 @@
 
 ### Use the API:
 
+**Please Notice To wait until the Consumer and Producer Ended sending And saving to data Base, So you will see the real data**
+
 Go to http://localhost:8000/swagger for visual api testing (If you change the port on the .env file, make sure to replace it here!)
 
 ---
